@@ -83,6 +83,7 @@ public class Node {
  }
 
 class Solution {
+    // 1. 满二叉树
     func connect(_ root: Node?) -> Node? {
         // p 为父节点, 用于给左孩子结点next指针赋值
         var p = root
@@ -109,6 +110,53 @@ class Solution {
                 }
             }
         }
+        return root
+    }
+    
+    // 2. 普通二叉树
+    func connect_(_ root: Node?) -> Node? {
+        // p为父节点, 用于给孩子节点的next指针赋值
+        var p = root
+        // q 为每一层的第一个节点
+        var q = p?.left ?? p?.right
+        // 当某一层没有节点时, 表明遍历结束
+        while q != nil {
+            // 当p的next不为空时, 表明next指针可能不在兄弟节点间赋值
+            while p?.next != nil {
+                // p的左右子树都存在时, p的左子树的next指针指向p的右子树结点
+                if (p?.left != nil &&
+                    p?.right != nil) {
+                    p?.left?.next = p?.right
+                }
+                // 在非兄弟节点间赋值next
+                let r = p?.right ?? p?.left
+                // p移动到第一个存在子树的节点上
+                while p != nil &&
+                    p?.next?.left == nil &&
+                    p?.next?.right == nil {
+                    p = p?.next
+                }
+                // t指向r右边的第一个非兄弟节点
+                let t = p?.next?.left ?? p?.next?.right
+                r?.next = t
+                p = p?.next
+            }
+            // 当p的next为空时, 准备遍历下一层
+            if (p?.left != nil &&
+                p?.right != nil) {
+                p?.left?.next = p?.right
+            }
+            while q != nil &&
+                q?.left == nil &&
+                q?.right == nil {
+                q = q?.next
+            }
+            if q != nil {
+                p = q;
+                q = q?.left ?? q?.right
+            }
+        }
+        
         return root
     }
 }
