@@ -77,9 +77,24 @@ class TreeNode {
 
 class Solution {
     func sumNumbers(_ root: TreeNode?) -> Int {
-        return 0
+        guard let r = root else {
+            return 0
+        }
+        return dfs(r, 0)
+    }
+    
+    func dfs(_ node: TreeNode?, _ prevSum: Int) -> Int {
+        if node == nil {
+            return 0
+        }
+        let sum = prevSum * 10 + (node?.val ?? 0)
+        if node?.left == nil && node?.right == nil {
+            return sum
+        }
+        return dfs(node?.left, sum) + dfs(node?.right, sum)
     }
 }
 
-print("Hello, World!")
+let root = TreeNode().create([1, 1])
+let s = Solution().sumNumbers(root)
 
