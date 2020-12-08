@@ -76,34 +76,28 @@ class TreeNode {
 }
 
 class Solution {
+    func dfs(_ root: TreeNode?, _ path: [Int], _ sum: Int, _ result: inout [[Int]]) {
+        guard let r = root else {
+            return
+        }
+        var curPath: [Int] = path + [r.val]
+        curPath[0] = curPath[0] - r.val
+        if curPath[0] == 0 &&
+            r.left == nil &&
+            r.right == nil {
+            result.append(Array.init(curPath[1...]));
+        }
+        dfs(r.left, curPath, sum, &result)
+        dfs(r.right, curPath, sum, &result)
+    }
+    
     func pathSum(_ root: TreeNode?, _ sum: Int) -> [[Int]] {
         var list: [[Int]] = []
-        guard let r = root else {
-            return list
-        }
-        var stack: [TreeNode] = []
-        stack.append(r)
-        
-        var curPath: [Int] = [];
-        
-        while !stack.isEmpty {
-            let top = stack.removeLast()
-            curPath.append(top.val)
-            print(curPath)
-            if let right = top.right {
-                stack.append(right)
-            }
-            if let left = top.left {
-                stack.append(left)
-            }
-            if top.left == nil && top.right == nil {
-                curPath.removeLast()
-            }
-        }
-        
+        dfs(root, [sum], sum, &list)
         return list;
     }
 }
 
-let root = TreeNode().create([5,4,8,11,0,13,4,7,2,0,0,5,1])
-Solution().pathSum(root, 22)
+let root = TreeNode().create([-2,0,-3])
+print(Solution().pathSum(root, -5))
+
