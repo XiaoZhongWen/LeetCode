@@ -77,7 +77,33 @@ class TreeNode {
 
 class Solution {
     func pathSum(_ root: TreeNode?, _ sum: Int) -> [[Int]] {
+        var list: [[Int]] = []
+        guard let r = root else {
+            return list
+        }
+        var stack: [TreeNode] = []
+        stack.append(r)
         
+        var curPath: [Int] = [];
+        
+        while !stack.isEmpty {
+            let top = stack.removeLast()
+            curPath.append(top.val)
+            print(curPath)
+            if let right = top.right {
+                stack.append(right)
+            }
+            if let left = top.left {
+                stack.append(left)
+            }
+            if top.left == nil && top.right == nil {
+                curPath.removeLast()
+            }
+        }
+        
+        return list;
     }
 }
 
+let root = TreeNode().create([5,4,8,11,0,13,4,7,2,0,0,5,1])
+Solution().pathSum(root, 22)
